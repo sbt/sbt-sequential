@@ -12,8 +12,9 @@ object Plugin extends sbt.Plugin {
 
 case object DefOps {
   import language.experimental.macros
-  import CustomTaskMacro.sequentialTaskMacroImpl
+  import CustomTaskMacro.{sequentialTaskMacroImpl, debugSequentialTaskMacroImpl}
   def sequentialTask[T](t: T): Def.Initialize[Task[T]] = macro sequentialTaskMacroImpl[T]
+  def debugSequentialTask[T](t: T): Def.Initialize[Task[T]] = macro debugSequentialTaskMacroImpl[T] 
 }
 
 object CustomTaskMacro {
@@ -21,6 +22,9 @@ object CustomTaskMacro {
   import scala.reflect._
   import reflect.macros._
   import reflect.internal.annotations.compileTimeOnly
+
+  def debugSequentialTaskMacroImpl[T0: c0.WeakTypeTag](c0: Context)(t: c0.Expr[T0]): c0.Expr[Def.Initialize[Task[T0]]] =
+    throw new Exception(sequentialTaskMacroImpl(c0)(t).tree.toString)
 
   def sequentialTaskMacroImpl[T0: c0.WeakTypeTag](c0: Context)(t: c0.Expr[T0]): c0.Expr[Def.Initialize[Task[T0]]] = {
     import c0.universe.{ Apply => ApplyTree, _ }
@@ -43,8 +47,6 @@ object CustomTaskMacro {
     }
     val expr = t.tree match {
       case Block(Nil, x) => wrapInTask(x)
-      
-      // case Block(xs, x)  => throw new Exception(emulateFlatMaps(xs.toVector, x).tree.toString)
       case Block(xs, x)  => emulateFlatMaps(xs.toVector, x)
       case x             => wrapInTask(x)
     }
