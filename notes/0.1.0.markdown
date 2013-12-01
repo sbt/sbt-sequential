@@ -1,0 +1,19 @@
+This is the initial release of sbt-sequential.
+
+Usage
+-----
+
+sbt-sequential implicitly adds `Def.sequentialTask[T]` method, which returns a sequential task.
+
+    // sequential task
+    lazy val integrationTestImpl = Def.sequentialTask {
+      startServer.value
+      val n = 1
+      Thread.sleep(2000)
+      stopServer.value
+      n
+    }
+
+    integrationTest := integrationTestImpl.value
+
+See [sequencing tasks with sbt-sequential](http://eed3si9n.com/sequencing-tasks-with-sbt-sequential) for details.

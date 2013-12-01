@@ -15,7 +15,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-sequential" % "0.1.0")
 Usage
 -----
 
-This plugin implicitly adds `Def.sequentialTask` method, which defines a sequential task.
+This plugin implicitly adds `Def.sequentialTask[T]` method, which returns a sequential task.
 
 ```scala
 val startServer = taskKey[Unit]("start server.")
@@ -33,7 +33,7 @@ stopServer := {
 }
 
 // sequential task
-val task1 = Def.sequentialTask {
+lazy val integrationTestImpl = Def.sequentialTask {
   startServer.value
   val n = 1
   Thread.sleep(2000)
@@ -41,8 +41,10 @@ val task1 = Def.sequentialTask {
   n
 }
 
-integrationTest := task1.value
+integrationTest := integrationTestImpl.value
 ```
+
+See [sequencing tasks with sbt-sequential](http://eed3si9n.com/sequencing-tasks-with-sbt-sequential) for details.
 
 License
 -------
