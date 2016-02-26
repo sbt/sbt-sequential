@@ -3,6 +3,15 @@ sbt-sequential
 
 sbt-sequential adds sequential tasks to sbt.
 
+**NOTE:**
+
+[0.13.8-notes]: http://www.scala-sbt.org/0.13/docs/sbt-0.13-Tech-Previews.html#Sequential+tasks
+[Sequencing]: http://www.scala-sbt.org/0.13/docs/Howto-Sequencing.html
+
+While this plugin provides a macro that allows you to code in imperative-looking code, a weaker version of it (essentially a list of keys) was add to sbt, as of version 0.13.8.
+
+See the relevant [release notes][0.13.8-notes] as well as [Sequencing][] section in the docs.
+
 Lastest
 -------
 
